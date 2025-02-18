@@ -1,0 +1,21 @@
+[
+    {"id":10, "text":"make few branches", "done":false},
+    {"id":20, "text":"add few files", "done":false},
+    {"id":30, "text":"commit changes", "done":false},
+    {"id":40, "text":"merge some branches", "done":false},
+    {"id":50, "text":"make files up to 20 lines", "done":false},
+    {"id":60, "text":"change the same file at different branches", "done":false},
+    {"id":65, "text":"merge some branches", "done":false},
+    {"id":70, "text":"make changes at different parts of file", "done":false},
+    {"id":75, "text":"merge some branches", "done":false},
+    {"id":80, "text":"make changes at closest parts of file", "done":false},
+    {"id":85, "text":"merge some branches", "done":false},   
+    {"id":90, "text":"make changes at same place", "done":false},
+    {"id":95, "text":"merge some branches", "done":false},
+    {"id":100, "text":"read about conflicts resolving", "done":false},
+    {"id":110, "text":"merge some branches", "done":false},
+    {"id":120, "text":"install some packet for autotests", "done":false},
+    {"id":130, "text":"write first test", "done":false},
+    {"id":140, "text":"run first test", "done":false},
+    {"id":150, "text":"celebrate", "done":false}
+]
