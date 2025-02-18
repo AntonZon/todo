@@ -17,5 +17,5 @@
     {"id":120, "text":"install some packet for autotests", "done":false},
     {"id":130, "text":"write first test", "done":false},
     {"id":140, "text":"run first test", "done":false},
-    {"id":150, "text":"celebrate", "done":false}
+    {"id":150, "text":"celebrate with a lot of fireworks", "done":false}
 ]
