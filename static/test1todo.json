@@ -3,7 +3,7 @@
     {"id":20, "text":"add few files", "done":false},
     {"id":30, "text":"commit changes", "done":false},
     {"id":40, "text":"merge some branches", "done":false},
-    {"id":50, "text":"make files up to 20 lines", "done":false},
+    {"id":50, "text":"make files up to 30 lines", "done":false},
     {"id":60, "text":"change the same file at different branches", "done":false},
     {"id":65, "text":"merge some branches", "done":false},
     {"id":70, "text":"make changes at different parts of file", "done":false},
