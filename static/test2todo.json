@@ -8,7 +8,7 @@
     {"id":65, "text":"merge some branches", "done":false},
     {"id":70, "text":"make changes at different parts of file", "done":false},
     {"id":75, "text":"merge some branches", "done":false},
-    {"id":80, "text":"make changes at closest parts of file", "done":false},
+    {"id":80, "text":"make changes just here, at closest parts of file, near the other changes", "done":true},
     {"id":85, "text":"merge some branches", "done":false},   
     {"id":90, "text":"make changes at same place", "done":false},
     {"id":95, "text":"merge some branches", "done":false},
