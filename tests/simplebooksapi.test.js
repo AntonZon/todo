@@ -1,7 +1,6 @@
 //tests for https://simple-books-api.glitch.me/api/books
 const console = require('console'); // import { log, error } from "console";
 
-
 const axios = require('axios');
 const baseURL = "https://simple-books-api.glitch.me";
 const randomEmail = Math.random().toString(36).substring(7) + "@test.com";
@@ -83,13 +82,13 @@ describe('Simple book tests', () => {
 
         it('fetches user data successfully', async () => {
             // Arrange
-             
+
             // Act
             const response = await fetchData(baseURL + "/books/" + bookId);
 
             // Assert
             expect(response.status).toBe(200);
-            
+
             console.log(`Book #${bookId} info: `);
             console.log(response.data);
         });
@@ -110,7 +109,7 @@ describe('Simple book tests', () => {
             expect(response.status).toBe(201);
             expect(response.data).toHaveProperty("accessToken");
             token = response.data.accessToken;
-            console.log("Authorization token: "+response.data.accessToken);
+            console.log("Authorization token: " + response.data.accessToken);
         });
     });
 
@@ -122,7 +121,7 @@ describe('Simple book tests', () => {
             // Act
             const response = await postData(baseURL + "/orders", {
                 "bookId": bookId,
-                "customerName": randomName 
+                "customerName": randomName
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -131,7 +130,7 @@ describe('Simple book tests', () => {
             expect(response.status).toBe(201);
             expect(response.data).toHaveProperty("orderId");
             orderId = response.data.orderId;
-            console.log("New order ID: "+orderId);
+            console.log("New order ID: " + orderId);
         });
     });
 
@@ -154,22 +153,24 @@ describe('Simple book tests', () => {
                 console.log("Book not found.");
             }
         });
+
         it('Order book successfully fail No authorisation', async () => {
-        
-        try {
+
+            try {
                 const response = await postData(baseURL + "/orders", {
                     "bookId": 2,
                     "customerName": "Anton"
                 });
-                console.log( response.error );
+                console.log(response.error);
             } catch (error) {
                 // Assert
                 expect(error.response.status).toBe(401);
-                
+
             }
         });
+
         it('Order book successfully fail NoAvailible #2', async () => {
-             try {
+            try {
                 const response = await postData(baseURL + "/orders", {
                     "bookId": 2,
                     "customerName": "Anton"
@@ -179,7 +180,7 @@ describe('Simple book tests', () => {
                 console.log(response.error);
             } catch (error) {
                 // Assert
-                expect(error.response.status).toBe(404);  
+                expect(error.response.status).toBe(404);
             };
             // Assert
             console.log("No new order");
@@ -251,21 +252,30 @@ describe('Simple book tests', () => {
         });
     });
 
-    describe('Check Get The deleted Order', () => {
+    describe('Check fail deleting Order', () => {
 
-        it('fetches user order successfully failed', async () => {
+        it('deleting user order successfully failed', async () => {
             // Arrange
-            
+
             // Act
-            try {
-            const response = await fetchData(baseURL + `/orders/${orderId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-        } catch (error) {
-            // Assert
-            expect(error.status).toBe(404);
-            console.log(error.status+`. Order ${orderId} not found.`);
-        }   
+            expect(async () => { 
+                const response = await fetchData(baseURL + `/orders/${orderId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                }); 
+            }).rejects.toThrow('Request failed with status code 404');
+
+
+ /*           try {
+                const response = await fetchData(baseURL + `/orders/${orderId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+*///         } catch (error) {
+                // Assert
+               
+    //            expect(error.status).toBe(404);
+    //           console.log(error.status + `. Order ${orderId} not found.`);
+   //         }
+        
         });
     });
 });
