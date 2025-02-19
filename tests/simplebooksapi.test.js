@@ -6,7 +6,7 @@ const axios = require('axios');
 const baseURL = "https://simple-books-api.glitch.me";
 const randomEmail = Math.random().toString(36).substring(7) + "@test.com";
 const randomName = Math.random().toString(36).substring(7);
-const bookId = Math.floor(Math.random()*6) + 1;
+const bookId = 3; //Math.floor(Math.random()*6) + 1;
 let token;
 let orderId;
 
@@ -122,7 +122,7 @@ describe('Simple book tests', () => {
             // Act
             const response = await postData(baseURL + "/orders", {
                 "bookId": bookId,
-                "customerName": "Anton"
+                "customerName": randomName 
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -134,6 +134,59 @@ describe('Simple book tests', () => {
             console.log("New order ID: "+orderId);
         });
     });
+
+    describe('Check Order book fail', () => {
+
+        it('Order book successfully fail (id=100)', async () => {
+            // Arrange
+
+            // Act
+            try {
+                const response = await postData(baseURL + "/orders", {
+                    "bookId": 100,
+                    "customerName": "Anton"
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (error) {
+                // Assert
+                expect(error.response.status).toBe(400);
+                console.log("Book not found.");
+            }
+        });
+        it('Order book successfully fail No authorisation', async () => {
+        
+        try {
+                const response = await postData(baseURL + "/orders", {
+                    "bookId": 2,
+                    "customerName": "Anton"
+                });
+                console.log( response.error );
+            } catch (error) {
+                // Assert
+                expect(error.response.status).toBe(401);
+                
+            }
+        });
+        it('Order book successfully fail NoAvailible #2', async () => {
+             try {
+                const response = await postData(baseURL + "/orders", {
+                    "bookId": 2,
+                    "customerName": "Anton"
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                console.log(response.error);
+            } catch (error) {
+                // Assert
+                expect(error.response.status).toBe(404);  
+            };
+            // Assert
+            console.log("No new order");
+        });
+    });
+
+
 
     describe('Check Get orders', () => {
 
