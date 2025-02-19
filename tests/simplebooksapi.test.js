@@ -1,5 +1,14 @@
 //tests for https://simple-books-api.glitch.me/api/books
+const console = require('console'); // import { log, error } from "console";
+
+
 const axios = require('axios');
+const baseURL = "https://simple-books-api.glitch.me";
+const randomEmail = Math.random().toString(36).substring(7) + "@test.com";
+const randomName = Math.random().toString(36).substring(7);
+const bookId = Math.floor(Math.random()*6) + 1;
+let token;
+let orderId;
 
 const fetchData = async (url, config) => {
     try {
@@ -19,10 +28,24 @@ const postData = async (url, data, config) => {
     }
 };
 
-const baseURL = "https://simple-books-api.glitch.me";
-const randomEmail = Math.random().toString(36).substring(7) + "@test.com";
-let token;
-let orderId;
+const patchData = async (url, data, config) => {
+    try {
+        const response = await axios.patch(url, data, config);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const delData = async (url, config) => {
+    try {
+        const response = await axios.delete(url, config);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 describe('Simple book tests', () => {
 
@@ -50,6 +73,9 @@ describe('Simple book tests', () => {
 
             // Assert
             expect(response.status).toBe(200);
+            console.log("List of books: ");
+            console.log(response.data);
+
         });
     });
 
@@ -57,12 +83,15 @@ describe('Simple book tests', () => {
 
         it('fetches user data successfully', async () => {
             // Arrange
-            const bookId = 1;
+             
             // Act
             const response = await fetchData(baseURL + "/books/" + bookId);
 
             // Assert
             expect(response.status).toBe(200);
+            
+            console.log(`Book #${bookId} info: `);
+            console.log(response.data);
         });
     });
 
@@ -81,6 +110,7 @@ describe('Simple book tests', () => {
             expect(response.status).toBe(201);
             expect(response.data).toHaveProperty("accessToken");
             token = response.data.accessToken;
+            console.log("Authorization token: "+response.data.accessToken);
         });
     });
 
@@ -91,7 +121,7 @@ describe('Simple book tests', () => {
 
             // Act
             const response = await postData(baseURL + "/orders", {
-                "bookId": 5,
+                "bookId": bookId,
                 "customerName": "Anton"
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -101,36 +131,42 @@ describe('Simple book tests', () => {
             expect(response.status).toBe(201);
             expect(response.data).toHaveProperty("orderId");
             orderId = response.data.orderId;
+            console.log("New order ID: "+orderId);
         });
     });
-   
+
     describe('Check Get orders', () => {
 
         it('fetches orders successfully', async () => {
             // Arrange
-            
+
             // Act
             const response = await fetchData(baseURL + "/orders", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             // Assert
             expect(response.status).toBe(200);
+            console.log("Orders List: ");
+            console.log(response.data);
         });
     });
-    
- /*   describe('Check patch the order', () => {
+
+    describe('Check update the order', () => {
 
         it('fetches user order successfully', async () => {
             // Arrange
-            const bookId = 1;
+
             // Act
-            const response = await fetchData(baseURL + `/orders/${orderId}`, {
-                headers: { Authorization: `Bearer ${token}`}});
+            const response = await patchData(baseURL + `/orders/${orderId}`,
+                { "customerName": `Anton ${orderId}` },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
             // Assert
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(204);
+            console.log(`New name for order:  Anton ${orderId}`);
         });
     });
-*/
+
 
     describe('Check Get The Order', () => {
 
@@ -139,9 +175,44 @@ describe('Simple book tests', () => {
             const bookId = 1;
             // Act
             const response = await fetchData(baseURL + `/orders/${orderId}`, {
-                headers: { Authorization: `Bearer ${token}`}});
+                headers: { Authorization: `Bearer ${token}` }
+            });
             // Assert
             expect(response.status).toBe(200);
+            expect(response.data.customerName).toBe(`Anton ${orderId}`);
+        });
+    });
+
+    describe('Check deleting the order', () => {
+
+        it('delete user order successfully', async () => {
+            // Arrange
+
+            // Act
+            const response = await delData(baseURL + `/orders/${orderId}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            // Assert
+            expect(response.status).toBe(204);
+            console.log(`Order ${orderId} sucsesfully deleted.`);
+        });
+    });
+
+    describe('Check Get The deleted Order', () => {
+
+        it('fetches user order successfully failed', async () => {
+            // Arrange
+            
+            // Act
+            try {
+            const response = await fetchData(baseURL + `/orders/${orderId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (error) {
+            // Assert
+            expect(error.status).toBe(404);
+            console.log(error.status+`. Order ${orderId} not found.`);
+        }   
         });
     });
 });
