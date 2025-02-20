@@ -4,7 +4,7 @@ const assert = require('assert')
 const chrome = require('selenium-webdriver/chrome');
 
 describe('222', function() {
-   this.timeout(10000)
+   this.timeout(30000)
   let driver
   let vars
   let options
@@ -33,6 +33,7 @@ describe('222', function() {
     // 6 | sendKeys | id=docsearch-input | ${KEY_ENTER}
     await driver.findElement(By.id("docsearch-input")).sendKeys(Key.ENTER)
     
+    assert.equal(await driver.getTitle(), "WebDriver | Selenium");
     //expect(await driver.getTitle()).toEqual('WebDriver | Selenium');
   })
 });
