@@ -3,7 +3,7 @@ const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 const Chrome = require('selenium-webdriver/chrome');
 
-xdescribe('Google Search', function () {
+describe('Google Search', function () {
   it('should work', async function () {
     // this.timeout(30000)
     let vars
@@ -18,21 +18,21 @@ xdescribe('Google Search', function () {
       .build();
 
 
+    try {
+      await driver.get("https://www.selenium.dev/documentation");
+      await driver.findElement(By.className("DocSearch")).click();
+      await driver.findElement(By.className("DocSearch-Input")).click();
+      await driver.findElement(By.className("DocSearch-Input")).sendKeys("webdriver");
+      await driver.findElement(By.className("DocSearch-Input")).submit();
+      await driver.wait(until.elementLocated(By.className("DocSearch-Hit-title")));
 
-    await driver.get("https://www.selenium.dev/documentation/webdriver/getting_started/first_script/");
-     await driver.manage().window().setRect({ width: 1536, height: 816 });
-    await driver.findElement(By.css("#docsearch-1 .DocSearch-Button-Placeholder")).click();
-    // {
-    //   const element = await driver.findElement(By.css("#docsearch-1 .DocSearch-Button-Placeholder"))
-    //   await driver.actions({ bridge: true }).moveToElement(element).perform()
-    // }
-    // {
-    //   const element = await driver.findElement(By.CSS_SELECTOR, "body")
-    //   await driver.actions({ bridge: true }).moveToElement(element, 0, 0).perform()
-    // }
-    await driver.findElement(By.id("docsearch-input")).click();
-    await driver.findElement(By.id("docsearch-input")).sendKeys("webdriver");
-    await driver.findElement(By.css("#docsearch-item-0 .DocSearch-Hit-title")).click();
-   
-  });
-},30000);
+      await driver.findElement(By.className("DocSearch-Input")).sendKeys(Key.ENTER);
+     
+      await driver.wait(until.titleContains('WebDriver | Selenium'));
+
+      expect(await driver.getTitle()).toEqual('WebDriver | Selenium');
+    } finally {
+      //await driver.quit();
+    }
+  }, 30000);
+}, 30000);
